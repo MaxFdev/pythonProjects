@@ -29,14 +29,23 @@ def simulate_epidemic(G, seed, t, p):
     n = len(G)
 
     # Initialize the sets S, I, and R
-    S = set(range(n))  # Susceptible individuals
-    I = set(seed)  # Infected individuals
-    R = set()  # Recovered individuals
+    
+    # Susceptible individuals
+    S = set(range(n))  
+    
+    # Infected individuals
+    I = set(seed)  
+    
+    # Recovered individuals
+    R = set()  
 
     # Run the simulation until nobody has the infection
     while I:
+        
         new_infections = set()
-        to_remove = set()  # Infected individuals to be removed from I
+        
+        # Infected individuals to be removed from I
+        to_remove = set()  
 
         # Iterate over infected individuals
         for infected in I:
@@ -45,12 +54,14 @@ def simulate_epidemic(G, seed, t, p):
             neighbors = np.nonzero(G[infected])[0]
 
             # Find susceptible neighbors
-            susceptible_neighbors = []  # Initialize an empty list
+            susceptible_neighbors = []
 
             # Iterate over each neighbor in the neighbors list
             for neighbor in neighbors:
+
                 # Check if the neighbor is in the set S
                 if neighbor in S:
+
                     # If the neighbor is susceptible, add it to the susceptible_neighbors list
                     susceptible_neighbors.append(neighbor)
 
@@ -86,27 +97,49 @@ Test
 """
 
 def run_test(p_v):
-    p_values = p_v
-    num_iterations = 100
-    results = {}
+    # Set the provided p_values
+    p_values = p_v  
+    
+    # Number of iterations for each combination of p1 and p2
+    num_iterations = 100  
+    
+    # Dictionary to store the results
+    results = {}  
 
+    # Iterate over p_values
     for p1 in p_values:
         for p2 in p_values:
-            uninfected_total = 0
-            infected_total = 0
+            
+            # Total count of uninfected individuals
+            uninfected_total = 0  
+            
+            # Total count of infected individuals
+            infected_total = 0  
 
+            # Run simulations for each combination of p1 and p2
             for _ in range(num_iterations):
-                G = generate_random_graph(10, p1)
+                
+                # Generate a random graph
+                G = generate_random_graph(10, p1)  
+                
+                # Simulate epidemic and get counts
                 uninfected, infected = simulate_epidemic(G, {1}, 1, p2)
-                uninfected_total += uninfected
-                infected_total += infected
 
+                # Accumulate uninfected count
+                uninfected_total += uninfected  
+
+                # Accumulate infected count
+                infected_total += infected 
+
+            # Calculate average counts
             avg_uninfected = uninfected_total / num_iterations
             avg_infected = infected_total / num_iterations
 
+            # Store the results in the dictionary
             results[(p1, p2)] = (avg_uninfected, avg_infected)
 
     return results
+
 
 p_values = np.arange(0, 1.1, 0.1)
 results = run_test(p_values)
