@@ -1,2 +1,2 @@
 # pythonProjects
- Basic python projects and test code.
+Python learning projects and test code.
